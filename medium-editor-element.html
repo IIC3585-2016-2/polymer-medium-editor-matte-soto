@@ -1,0 +1,130 @@
+<link rel="import" href="../polymer/polymer.html">
+<script src="../medium-editor/dist/js/medium-editor.js"></script>
+<link rel="stylesheet" href="../medium-editor/dist/css/medium-editor.css">
+<link rel="stylesheet" href="../medium-editor/dist/css/themes/default.css">
+<link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+<script src="../jquery/dist/jquery.min.js"></script>
+<script src="../handlebars/handlebars.runtime.min.js"></script>
+<script src="../jquery-sortable/source/js/jquery-sortable-min.js"></script>
+
+<!--
+`medium-editor`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="medium-editor-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <div class="editable" id="medium-editor">
+      <content></content>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'medium-editor-element',
+
+      properties: {
+        /**
+         * CSS class added to active buttons in the toolbar.
+         */
+        activeButtonClass: {
+          type: String,
+          value: 'medium-editor-button-active',
+        },
+        /**
+         * Custom content for the toolbar buttons.
+         */
+        buttonLabels: {
+          type: Boolean,
+          value: false,
+        },
+        /**
+         * Time in milliseconds to show the toolbar or anchor tag preview.
+         */
+        delay: {
+          type: Number,
+          value: 0,
+        },
+        /**
+         * Enables/disables the use of the return-key. You can also set specific element behavior by using setting a data-disable-return attribute.
+         */
+        disableReturn: {
+          type: Boolean,
+          value: false,
+        },
+        /**
+         * Allows/disallows two (or more) empty new lines. You can also set specific element behavior by using setting a data-disable-double-return attribute.
+         */
+        disableDoubleReturn: {
+          type: Boolean,
+          value: false,
+        },
+        /**
+         * When set to true, it disallows spaces at the beginning and end of the element. Also it disallows entering 2 consecutive spaces between 2 words.
+         */
+        disableExtraSpaces: {
+          type: Boolean,
+          value: false,
+        },
+        /**
+         * Enables/disables adding the contenteditable behavior. Useful for using the toolbar with customized buttons/actions. You can also set specific element behavior by using setting a data-disable-editing attribute.
+         */
+        disableEditing: {
+          type: Boolean,
+          value: false,
+        },
+        /**
+         * Enable/disable native contentEditable automatic spellcheck.
+         */
+        spellcheck: {
+          type: Boolean,
+          value: true,
+        },
+        /**
+         * Enables/disables automatically adding the target="_blank" attribute to anchor tags.
+         */
+        targetBlank: {
+          type: Boolean,
+          value: false,
+        }
+      },
+
+      attached: function() {
+        var that = this;
+        that.element = document.querySelector("#medium-editor");
+        that.editor = new MediumEditor(that.element, {
+          activeButtonClass: this.activeButtonClass,
+          allowMultiParagraphSelection: this.allowMultiParagraphSelection,
+          buttonLabels: this.buttonLabels,
+          delay: this.delay,
+          disableReturn: this.disableReturn,
+          disableDoubleReturn: this.disableDoubleReturn,
+          disableExtraSpaces: this.disableExtraSpaces,
+          disableEditing: this.disableEditing,
+          elementsContainer: this.elementsContainer,
+          spellcheck: this.spellcheck,
+          targetBlank: this.targetBlank
+        });
+      },
+
+      /**
+       * Returns the editor content as HTML.
+       */
+      getContent: function() {
+        const editorContent = this.editor.serialize();
+        return editorContent["medium-editor"]["value"];
+      }
+
+    });
+  </script>
+</dom-module>
